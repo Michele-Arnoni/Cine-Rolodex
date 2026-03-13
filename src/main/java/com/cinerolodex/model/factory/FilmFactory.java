@@ -26,6 +26,7 @@ public class FilmFactory implements IFilmFactory {
         return instance;
     }
 
+    // --- RICETTA 1: Creazione da dati grezzi dal file system ---
     @Override
     public IFilm createFromRaw(RawElement raw) {
         //Pulizia del titolo dal nome del file
@@ -58,6 +59,58 @@ public class FilmFactory implements IFilmFactory {
             genereSconosciuto,
             annoDefault
         );
+    }
+
+    // --- RICETTA 2: Creazione per aggiornamento (Copia e Modifica) ---
+    @Override
+    public IFilm createWithNewTitle(IFilm original, String nuovoTitolo) {
+        return new Film(
+            original.getId(),
+            nuovoTitolo,
+            original.getPath(),
+            original.getRating(),
+            original.getStato(),
+            original.getRegista(),
+            original.getGenere(),
+            original.getAnno()
+        );
+    }
+
+    // --- RICETTA 3: Creazione per aggiornamento del regista (Copia e Modifica) ---
+    @Override
+    public IFilm createWithNewRegista(IFilm original, String nuovoRegista) {
+        return new Film(
+            original.getId(), original.getTitolo(), original.getPath(),
+            original.getRating(), original.getStato(),
+            new Regista(nuovoRegista), // Creiamo il nuovo oggetto Regista
+            original.getGenere(), original.getAnno()
+        );
+    }
+
+    // --- RICETTA 4: Creazione per aggiornamento dell'anno (Copia e Modifica) ---
+    @Override
+    public IFilm createWithNewYear(IFilm original, int nuovoAnno) {
+        return new Film(original.getId(), original.getTitolo(), original.getPath(),
+                        original.getRating(), original.getStato(),
+                        original.getRegista(), original.getGenere(), new Anno(nuovoAnno));
+    }
+
+    // --- RICETTA 5: Creazione per aggiornamento del genere (Copia e Modifica) ---
+    @Override
+    public IFilm createWithNewGenere(IFilm original, String nuovoGenere) {
+        return new Film(
+            original.getId(), original.getTitolo(), original.getPath(),
+            original.getRating(), original.getStato(),
+            original.getRegista(), new Genere(nuovoGenere), original.getAnno()
+        );
+    }
+
+    // --- RICETTA 6: Creazione per aggiornamento della valutazione (Copia e Modifica) ---
+    @Override
+    public IFilm createWithNewRating(IFilm original, Rating nuovoRating) {
+        return new Film(original.getId(), original.getTitolo(), original.getPath(),
+                        nuovoRating, original.getStato(),
+                        original.getRegista(), original.getGenere(), original.getAnno());
     }
 
     /**

@@ -1,17 +1,18 @@
 package com.cinerolodex.model;
 
 public class Anno {
-    private String nome;
+    private int valore;
 
     public Anno(int valore) {
-        this.nome = String.valueOf(valore);
+        this.valore = valore;
     }
 
-    public Anno(String nome) {
-        this.nome = nome;
+    public int getValore() {
+        return valore;
     }
 
-    public String getNome() {
-        return nome;
+    @Override
+    public String toString() {
+        return String.valueOf(valore);
     }
 }
