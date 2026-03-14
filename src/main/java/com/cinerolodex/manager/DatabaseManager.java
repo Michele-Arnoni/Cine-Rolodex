@@ -66,15 +66,15 @@ public class DatabaseManager implements IPersistence {
 
 
 	@Override
-	public void save(IFilm f) {
+	public boolean save(IFilm f) {
 		String sql = "INSERT INTO Film(titolo, path, rating, stato_visione, regista_id, genere_id, anno_id) " +
 					"VALUES(?, ?, ?, ?, ?, ?, ?)";
 
 		try {
 			// Recupero degli ID delle tabelle satellite (Regista, Genere, Anno) o inserimento se non esistono già
-			int idRegista = getOrInsertMetadata("Regista", "nome", f.getRegista());
-			int idGenere = getOrInsertMetadata("Genere", "nome", f.getGenere());
-			int idAnno = getOrInsertMetadata("Anno", "valore", f.getAnno());
+			int idRegista = getOrInsertMetadata("Regista", "nome", f.getRegista().getNome());
+			int idGenere = getOrInsertMetadata("Genere", "nome", f.getGenere().getNome());
+			int idAnno = getOrInsertMetadata("Anno", "valore", f.getAnno().getValore());
 
 			try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 				pstmt.setString(1, f.getTitolo());
@@ -89,25 +89,27 @@ public class DatabaseManager implements IPersistence {
 
 				pstmt.executeUpdate();
 				System.out.println("Film salvato con successo: " + f.getTitolo());
+				return true;
 			}
 		} catch (SQLException e) {
 			System.err.println("Errore nel salvataggio del film: " + e.getMessage());
+			return false;
 		}
 	}
 	
 
 
 	@Override
-	public void update(IFilm f) {
+	public boolean update(IFilm f) {
 		// Query SQL per aggiornare tutti i campi del film identificato dal suo ID
 		String sql = "UPDATE Film SET titolo = ?, path = ?, rating = ?, stato_visione = ?, " +
 					"regista_id = ?, genere_id = ?, anno_id = ? WHERE id = ?";
 
 		try {
 			// 1. Verifichiamo se i (potenziali) nuovi metadati esistono e otteniamo i loro ID
-			int idRegista = getOrInsertMetadata("Regista", "nome", f.getRegista());
-			int idGenere = getOrInsertMetadata("Genere", "nome", f.getGenere());
-			int idAnno = getOrInsertMetadata("Anno", "valore", f.getAnno());
+			int idRegista = getOrInsertMetadata("Regista", "nome", f.getRegista().getNome());
+			int idGenere = getOrInsertMetadata("Genere", "nome", f.getGenere().getNome());
+			int idAnno = getOrInsertMetadata("Anno", "valore", f.getAnno().getValore());
 
 			// 2. Eseguiamo l'aggiornamento della tabella principale
 			try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -124,17 +126,20 @@ public class DatabaseManager implements IPersistence {
 				
 				if (affectedRows > 0) {
 					System.out.println("Film aggiornato correttamente nel DB: " + f.getTitolo());
+					return true;
 				}
 			}
 		} catch (SQLException e) {
 			System.err.println("Errore durante l'aggiornamento del film: " + e.getMessage());
+			return false;
 		}
+		return false;
 	}
 	
 
 
 	@Override
-	public void delete(IFilm f) {
+	public boolean delete(IFilm f) {
 		// La query agisce solo sulla tabella Film identificando il record tramite l'ID
 		String sql = "DELETE FROM Film WHERE id = ?";
 
@@ -146,12 +151,14 @@ public class DatabaseManager implements IPersistence {
 			
 			if (affectedRows > 0) {
 				System.out.println("Film rimosso correttamente dal database: " + f.getTitolo());
+				return true;
 			} else {
 				System.out.println("Nessun film trovato con ID: " + f.getId());
 			}
 		} catch (SQLException e) {
 			System.err.println("Errore durante la rimozione del film: " + e.getMessage());
 		}
+		return false;
 	}
 	
 	
@@ -164,7 +171,11 @@ public class DatabaseManager implements IPersistence {
 		Map<String, Genere> generiCache = new HashMap<>();
 		Map<Integer, Anno> anniCache = new HashMap<>();
 
-		String sql = "SELECT f.*, r.nome AS regista_nome, g.nome AS genere_nome, a.valore AS anno_valore FROM ...";
+		String sql = "SELECT f.*, r.nome AS regista_nome, g.nome AS genere_nome, a.valore AS anno_valore " +
+				"FROM Film f " +
+				"JOIN Regista r ON f.regista_id = r.id " +
+				"JOIN Genere g ON f.genere_id = g.id " +
+				"JOIN Anno a ON f.anno_id = a.id";
 
 		try (Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql)) {
