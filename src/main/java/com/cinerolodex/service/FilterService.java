@@ -13,6 +13,7 @@ import com.cinerolodex.manager.CatalogManager;
 
 public class FilterService implements IFilterEngine {
     private static FilterService instance;
+    private final CatalogManager catalog = CatalogManager.getInstance(); //riferimento al CatalogManager per accedere alla collezione di film
     
     private FilterService() {
         // Costruttore privato per garantire il Singleton
@@ -24,32 +25,16 @@ public class FilterService implements IFilterEngine {
         }
         return instance;
     }
-
+    
     @Override
-    public List<IFilm> search(String titoloFilm) {
-        List<IFilm> allMovies = CatalogManager.getInstance().showCollection(); //Recupero della lista completa dei film dal CatalogManager
-        
-        if (titoloFilm == null || titoloFilm.isEmpty()) {
-            return allMovies;
-        }
-
-        // Filtro per sottostringa (case-insensitive)
-        return allMovies.stream()
-                .filter(f -> f.getTitolo().toLowerCase().contains(titoloFilm.toLowerCase()))
-                .collect(Collectors.toList());
-    }
-
-
-    @Override
-    public List<IFilm> filter(Genere genere, Anno anno, Regista regista, StatoVisione statoVisione, Rating rating) {
-        List<IFilm> allMovies = CatalogManager.getInstance().showCollection(); //Recupero della lista completa dei film dal CatalogManager
-
-        return allMovies.stream()
-            .filter(f -> (genere == null || f.getGenere().equals(genere)))
-            .filter(f -> (regista == null || f.getRegista().equals(regista)))
-            .filter(f -> (anno == null || f.getAnno().equals(anno)))
-            .filter(f -> (statoVisione == null || f.getStato().equals(statoVisione))) 
-            .filter(f -> (rating == null || f.getRating().equals(rating)))
-            .collect(Collectors.toList());
+    public List<IFilm> filter(String titolo, String genere, String anno, String regista, String stato, String rating) {
+        return catalog.showCollection().stream()
+            .filter(f -> titolo == null || titolo.isBlank() || f.getTitolo().toLowerCase().contains(titolo.toLowerCase()))
+            .filter(f -> genere == null || f.getGenere().getNome().equals(genere))
+            .filter(f -> regista == null || f.getRegista().getNome().equals(regista))
+            .filter(f -> anno == null || String.valueOf(f.getAnno().getValore()).equals(anno))
+            .filter(f -> stato == null || f.getStato().name().equals(stato))
+            .filter(f -> rating == null || f.getRating().name().equals(rating))
+            .toList();
     }
 }

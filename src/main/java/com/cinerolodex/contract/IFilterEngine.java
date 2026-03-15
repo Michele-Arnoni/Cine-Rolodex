@@ -8,6 +8,6 @@ import com.cinerolodex.model.Rating;
 import com.cinerolodex.model.StatoVisione;
 
 public interface IFilterEngine {
-    public List<IFilm> search(String titoloFilm);
-    public List<IFilm> filter(Genere genere, Anno anno, Regista regista, StatoVisione statoVisione, Rating rating);
+    // Metodo di filtro intrecciato con la ricerca
+    public List<IFilm> filter(String titolo, String genere, String anno, String regista, String stato, String rating);
 }
