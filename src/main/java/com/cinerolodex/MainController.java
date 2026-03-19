@@ -7,22 +7,18 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 
 import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.cinerolodex.contract.IFilm;
 import com.cinerolodex.contract.ICatalog;
 import com.cinerolodex.manager.CatalogManager;
 import com.cinerolodex.contract.IFilterEngine;
 import com.cinerolodex.service.FilterService;
-import com.cinerolodex.contract.IMediaPlayerManager;
 import com.cinerolodex.manager.MediaPlayerManager;
-import com.cinerolodex.contract.IFilmFactory;
 import com.cinerolodex.model.Anno;
 import com.cinerolodex.model.Genere;
 import com.cinerolodex.model.Rating;
@@ -56,12 +52,15 @@ public class MainController {
         // --- CONFIGURAZIONE COLONNE ---
         setupTableColumns();
 
-        // --- POPOLAMENTO INIZIALE ---
+        // --- POPOLAMENTO INIZIALE DATABASE ---
         refreshTable();
         populateFilterMenus();
 
         // --- LOGICA DI RICERCA E FILTRO UNIFICATA ---
-        // Ogni volta che il testo cambia o una combo viene selezionata, scatta applyFilters()
+        /*
+         * IMPLEMENTAZIONE DEL DESIGN PATTERN OBSERVER:
+         * Ogni volta che il testo cambia o una combo viene selezionata, scatta il metodo applyFilters()
+         */
         searchField.textProperty().addListener((obs, oldV, newV) -> applyFilters());
         genreFilter.valueProperty().addListener((obs, oldV, newV) -> applyFilters());
         directorFilter.valueProperty().addListener((obs, oldV, newV) -> applyFilters());
@@ -76,7 +75,7 @@ public class MainController {
     private void applyFilters() {
         String titleText = searchField.getText();
         
-        // Se è selezionato "Tutti", passiamo null al servizio di filtraggio
+        // Se è selezionato "Tutti", passiamo null come parametro al servizio di filtraggio
         String g = getFilterValue(genreFilter);
         String d = getFilterValue(directorFilter);
         String a = getFilterValue(yearFilter);
@@ -95,7 +94,7 @@ public class MainController {
     }
 
     /**
-     * Riempie le ComboBox con i valori unici presenti nel catalogo
+     * Riempie le ComboBox con i valori UNICI presenti nel catalogo
      */
     private void populateFilterMenus() {
         List<IFilm> all = catalog.showCollection();
@@ -125,10 +124,12 @@ public class MainController {
         ratingFilter.setValue("Tutti");
     }
 
+    // Metodo helper per ricaricare la tabella dopo modifiche al catalogo (aggiunta/rimozione/aggiornamento)
     private void refreshTable() {
         movieTable.setItems((ObservableList<IFilm>) catalog.showCollection());
     }
 
+    // Metodo per resettare tutti i filtri e mostrare l'intera collezione
     @FXML
     private void handleResetFilters() {
         searchField.clear();
@@ -142,7 +143,7 @@ public class MainController {
         System.out.println("Filtri resettati.");
     }
 
-    // --- METODI DI CONFIGURAZIONE TABELLA ---
+    // Metodo per configurare le colonne della tabella UI e abilitare l'editing in-place
     private void setupTableColumns() {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("titolo"));
         directorColumn.setCellValueFactory(new PropertyValueFactory<>("regista"));
@@ -200,17 +201,24 @@ public class MainController {
         });
     }
 
+    /**
+     * Metodo per gestire l'aggiunta di un nuovo film tramite FileChooser, delegando al CatalogManager e aggiornando i menu a tendina
+     * @see ./docs/SequenceDiagrams.md#aggiunta-nuovo-film
+     * */
     @FXML
     private void handleAddMovie() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.mkv", "*.avi"));
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
-            catalog.addEntry(selectedFile.toPath());
-            populateFilterMenus(); // Aggiorniamo i menu se il nuovo film ha un nuovo regista/genere
+            catalog.addEntry(selectedFile.toPath()); //delega al CatalogManager la creazione dell'istanza di IFilm e l'aggiunta al catalogo
+            populateFilterMenus(); // Aggiorniamo i menu se viene aggiunto un nuovo film con un nuovo genere/regista/anno
         }
     }
 
+    /**
+     * Metodo per gestire la riproduzione del film selezionato, delegando al MediaPlayerManager
+     * */
     @FXML
     private void handlePlay() {
         IFilm selected = movieTable.getSelectionModel().getSelectedItem();
@@ -219,6 +227,10 @@ public class MainController {
         }
     }
 
+    /**
+     * Metodo per gestire la cancellazione del film selezionato dal catalogo
+     * @see ./docs/SequenceDiagrams.md#rimozione-film
+     * */
     @FXML
     private void handleDelete() {
         IFilm selected = movieTable.getSelectionModel().getSelectedItem();

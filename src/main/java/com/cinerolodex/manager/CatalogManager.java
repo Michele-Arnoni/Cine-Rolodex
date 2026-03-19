@@ -26,7 +26,7 @@ public class CatalogManager implements com.cinerolodex.contract.ICatalog {
     
 
     private CatalogManager() {
-        // Inizializzazione della ObservableList
+        // Inizializzazione della ObservableList (DESIGN PATTERN: Observer)
         this.movies = FXCollections.observableArrayList();
         
         // Ottenimento dell'istanza del DatabaseManager (Singleton)
@@ -52,12 +52,16 @@ public class CatalogManager implements com.cinerolodex.contract.ICatalog {
         return instance;
     }
 
+    // Ritorna la lista dei film presenti nel catalogo, utilizzando la ObservableList per garantire l'aggiornamento automatico della UI
     @Override
     public List<IFilm> showCollection() {
-        // Ritorna una lista non modificabile, solo questa classe deve avere il controllo sul catalogo.
         return movies;
     }
 
+    /**
+     * Aggiunta nuovo film al catalogo, con gestione degli errori e aggiornamento della UI in tempo reale grazie alla ObservableList di JavaFX.
+     * @see ./docs/SequenceDiagrams.md#aggiunta-nuovo-film
+     * */
     @Override
     public void addEntry(Path path) {
         // Controllo preventivo: il film è già in lista?
@@ -97,6 +101,10 @@ public class CatalogManager implements com.cinerolodex.contract.ICatalog {
         }
     }
 
+    /**
+     * Rimozione di un film dal catalogo, con gestione degli errori e aggiornamento della UI in tempo reale grazie alla ObservableList di JavaFX.
+     * @see ./docs/SequenceDiagrams.md#rimozione-film
+     * */
     @Override
     public void removeEntry(IFilm film) { //rimuove un film dal catalogo.
         /*
@@ -111,9 +119,10 @@ public class CatalogManager implements com.cinerolodex.contract.ICatalog {
     }
 
 
-    /*
+    /**
      * La user interface crea all'occorenza un NUOVO IFilm con le informazioni aggiornate con il fine di non sporcare
      * l'oggetto originale prima che effettivamente le modifiche siano state confermate e salvate nel database.
+     * @see ./docs/SequenceDiagrams.md#modifica-film
      */
     @Override
     public void updateEntry(IFilm oldFilm, IFilm updatedFilm) { //aggiorna le informazioni di un film esistente nel catalogo dato l'oggetto Film con le nuove informazioni.
@@ -125,7 +134,7 @@ public class CatalogManager implements com.cinerolodex.contract.ICatalog {
             
             if (index != -1) {
                 // Sostituzione dell'oggetto nella ObservableList con il nuovo oggetto aggiornato
-                // Questo notifica automaticamente la TableView di JavaFX
+                // Questo notifica automaticamente la TableView (UI) di JavaFX
                 movies.set(index, updatedFilm);
                 System.out.println("Sostituzione completata per: " + updatedFilm.getTitolo());
             }

@@ -64,7 +64,7 @@ public class DatabaseManager implements IPersistence {
     }
 
 
-
+	
 	@Override
 	public boolean save(IFilm f) {
 		String sql = "INSERT INTO Film(titolo, path, rating, stato_visione, regista_id, genere_id, anno_id) " +

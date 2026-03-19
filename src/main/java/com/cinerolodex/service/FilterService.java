@@ -26,6 +26,7 @@ public class FilterService implements IFilterEngine {
         return instance;
     }
     
+    // Implementazione del metodo di filtraggio, che utilizza lo stream API di Java per applicare i filtri in modo efficiente e leggibile.
     @Override
     public List<IFilm> filter(String titolo, String genere, String anno, String regista, String stato, String rating) {
         return catalog.showCollection().stream()
