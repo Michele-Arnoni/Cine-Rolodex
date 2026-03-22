@@ -32,11 +32,11 @@ public class FilterService implements IFilterEngine {
     public List<IFilm> filter(String titolo, String genere, String anno, String regista, String stato, String rating) {
         return catalog.showCollection().stream()
             .filter(f -> titolo == null || titolo.isBlank() || f.getTitolo().toLowerCase().contains(titolo.toLowerCase()))
-            .filter(f -> genere == null || f.getGenere().getNome().equals(genere))
-            .filter(f -> regista == null || f.getRegista().getNome().equals(regista))
-            .filter(f -> anno == null || String.valueOf(f.getAnno().getValore()).equals(anno))
-            .filter(f -> stato == null || f.getStato().name().equals(stato))
-            .filter(f -> rating == null || f.getRating().name().equals(rating))
+            .filter(f -> genere == null || genere.isBlank() || (f.getGenere() != null && f.getGenere().getNome().equalsIgnoreCase(genere)))
+            .filter(f -> regista == null || regista.isBlank() || (f.getRegista() != null && f.getRegista().getNome().equalsIgnoreCase(regista)))
+            .filter(f -> anno == null || anno.isBlank() || (f.getAnno() != null && String.valueOf(f.getAnno().getValore()).equals(anno)))
+            .filter(f -> stato == null || stato.isBlank() || (f.getStato() != null && f.getStato().name().equalsIgnoreCase(stato)))
+            .filter(f -> rating == null || rating.isBlank() || (f.getRating() != null && f.getRating().name().equalsIgnoreCase(rating)))
             .toList();
     }
 }
