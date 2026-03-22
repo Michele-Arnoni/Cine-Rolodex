@@ -1,16 +1,14 @@
 package com.cinerolodex.service;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.cinerolodex.contract.IFilterEngine;
 import com.cinerolodex.contract.IFilm;
-import com.cinerolodex.model.Anno;
-import com.cinerolodex.model.Genere;
-import com.cinerolodex.model.Regista;
-import com.cinerolodex.model.Rating;
-import com.cinerolodex.model.StatoVisione;
 import com.cinerolodex.manager.CatalogManager;
 
+/**
+ * @see src/test/java/com/cinerolodex/test/FilterServiceTest.java per test di unità che verificano il corretto funzionamento della logica di filtraggio.
+ * Il FilterService è responsabile di applicare i filtri alla collezione di film.
+ */
 public class FilterService implements IFilterEngine {
     private static FilterService instance;
     private final CatalogManager catalog = CatalogManager.getInstance(); //riferimento al CatalogManager per accedere alla collezione di film
@@ -26,7 +24,10 @@ public class FilterService implements IFilterEngine {
         return instance;
     }
     
-    // Implementazione del metodo di filtraggio, che utilizza lo stream API di Java per applicare i filtri in modo efficiente e leggibile.
+    /**
+     * Implementazione del metodo di filtraggio, che utilizza lo stream API di Java per applicare i filtri in modo efficiente e leggibile.
+     * Ogni filtro verifica se il parametro è null o vuoto (che rappresenta "Tutti") e, in caso contrario, applica il filtro specifico.
+     **/
     @Override
     public List<IFilm> filter(String titolo, String genere, String anno, String regista, String stato, String rating) {
         return catalog.showCollection().stream()

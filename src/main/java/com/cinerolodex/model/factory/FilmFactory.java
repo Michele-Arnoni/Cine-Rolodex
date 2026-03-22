@@ -12,6 +12,10 @@ import com.cinerolodex.model.RawElement;
 import com.cinerolodex.model.Regista;
 import com.cinerolodex.model.StatoVisione;
 
+/**
+ * @see src/test/java/com/cinerolodex/test/FilmFactoryTest.java per test di unità che verificano il corretto funzionamento del FilmFactory.
+ * Il FilmFactory è responsabile della creazione di istanze di IFilm.
+ */
 public class FilmFactory implements IFilmFactory {
     private static FilmFactory instance;
 
@@ -61,7 +65,7 @@ public class FilmFactory implements IFilmFactory {
         );
     }
 
-    // --- RICETTA 2: Creazione per aggiornamento (Copia e Modifica) ---
+    // --- RICETTA 2: Creazione per aggiornamento del titolo (Copia e Modifica) ---
     @Override
     public IFilm createWithNewTitle(IFilm original, String nuovoTitolo) {
         return new Film(

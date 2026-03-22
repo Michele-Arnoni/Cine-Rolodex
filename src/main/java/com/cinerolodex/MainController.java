@@ -98,7 +98,7 @@ public class MainController {
      */
     private void populateFilterMenus() {
         List<IFilm> all = catalog.showCollection();
-
+        
         // Genere
         genreFilter.getItems().setAll("Tutti");
         genreFilter.getItems().addAll(all.stream().map(f -> f.getGenere().getNome()).distinct().sorted().toList());

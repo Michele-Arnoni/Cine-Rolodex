@@ -1,7 +1,6 @@
 package com.cinerolodex.contract;
 import java.nio.file.Path;
 import java.util.List;
-import com.cinerolodex.model.RawElement;
 
 public interface ICatalog {
     public List<IFilm> showCollection();
