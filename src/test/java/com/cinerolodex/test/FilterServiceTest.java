@@ -6,9 +6,14 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import com.cinerolodex.contract.IFilm;
 import com.cinerolodex.service.FilterService;
+import com.cinerolodex.model.Anno;
 import com.cinerolodex.model.Film;
-import com.cinerolodex.model.factory.FilmFactory;
-import com.cinerolodex.model.RawElement;
+import com.cinerolodex.model.Genere;
+import com.cinerolodex.model.Regista;
+import com.cinerolodex.model.Rating;
+import com.cinerolodex.model.StatoVisione;
+import com.cinerolodex.manager.CatalogManager;
+import java.nio.file.Path;
 
 class FilterServiceTest {
     private FilterService filterService;
@@ -17,19 +22,33 @@ class FilterServiceTest {
     @BeforeEach
     void setUp() {
         filterService = FilterService.getInstance();
+        CatalogManager catalog = CatalogManager.getInstance();
         
-        // Creazione di una lista fittizia di test
-        testList = List.of(
-            FilmFactory.getInstance().createFromRaw(new RawElement("Inception_2010_Bluray.mp4", null)),
-            FilmFactory.getInstance().createFromRaw(new RawElement("The_Dark_Knight_2008_BluRay.mp4", null)),
-            FilmFactory.getInstance().createFromRaw(new RawElement("Interstellar_2014_BluRay.mp4", null))
+        // Puliamo il catalogo da eventuali film caricati dal database reale
+        catalog.clearForTesting();
+
+        // Creiamo i film di test con tutti i parametri richiesti dal tuo costruttore
+        IFilm f1 = new Film(
+            1, "Inception", java.nio.file.Path.of("test1.mp4"),
+            Rating.MI_PIACE, StatoVisione.VISTO,
+            new Regista("Christopher Nolan"), new Genere("Azione"), new Anno(2010)
         );
+
+        IFilm f2 = new Film(
+            2, "Matrix", java.nio.file.Path.of("test2.mp4"),
+            Rating.MI_PIACE, StatoVisione.VISTO,
+            new Regista("Wachowski"), new Genere("Azione"), new Anno(1999)
+        );
+
+        // Aggiungiamo i film al catalogo tramite il nuovo metodo
+        catalog.addFilmForTesting(f1);
+        catalog.addFilmForTesting(f2);
     }
 
     @Test
     void testFilterByGenre() {
-        // Rimuovi 'testList' dagli argomenti
+        // Cerchiamo "Azione": ora ci aspettiamo esattamente 2 film
         List<IFilm> result = filterService.filter(null, "Azione", null, null, null, null); 
-        assertEquals(2, result.size());
+        assertEquals(2, result.size(), "Dovrebbe trovare 2 film di genere Azione");
     }
 }

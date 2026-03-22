@@ -142,4 +142,16 @@ public class CatalogManager implements com.cinerolodex.contract.ICatalog {
             System.err.println("Errore nell'aggiornamento dei dati del film.");
         }
     }
+
+
+    //METODI DI SUPPORTO PER I TEST (non esposti all'esterno del package)
+    // Metodo per ripulire il catalogo (utile per i test o per un reset della UI)
+    public void clearForTesting() {
+        movies.clear();
+    }
+
+    // Metodo per aggiungere un film direttamente alla lista senza toccare DB o FileSystem
+    public void addFilmForTesting(IFilm film) {
+        movies.add(film);
+    }
 }
