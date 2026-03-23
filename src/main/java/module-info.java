@@ -9,6 +9,5 @@ module com.cinerolodex {
 
     opens com.cinerolodex.model to javafx.base, javafx.fxml;
     
-    // Questa riga va bene se il pacchetto dei test si chiama così
-    opens com.cinerolodex.test to org.junit.platform.commons;
+    //opens com.cinerolodex.test to org.junit.platform.commons;
 }
