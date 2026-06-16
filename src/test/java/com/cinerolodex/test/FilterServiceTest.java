@@ -14,9 +14,9 @@ import com.cinerolodex.model.Rating;
 import com.cinerolodex.model.StatoVisione;
 import com.cinerolodex.manager.CatalogManager;
 
-/** 
+/**
 * Test per verificare il funzionamento del metodo filter del FilterService, in particolare per il filtro per genere.
-* @see FilterService#filter(String, String, String, String, String, String)  
+* @see FilterService#filter(String, String, String, String, String, String)
 */
 class FilterServiceTest {
     private FilterService filterService;

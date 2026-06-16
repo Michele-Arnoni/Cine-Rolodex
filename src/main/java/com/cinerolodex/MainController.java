@@ -33,6 +33,7 @@ public class MainController {
     @FXML private TableColumn<IFilm, Genere> genreColumn;
     @FXML private TableColumn<IFilm, Anno> yearColumn;
     @FXML private TableColumn<IFilm, Rating> ratingColumn;
+    @FXML private TableColumn<IFilm, StatoVisione> stateColumn;
 
     @FXML private TextField searchField;
 
@@ -150,6 +151,7 @@ public class MainController {
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genere"));
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("anno"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        stateColumn.setCellValueFactory(new PropertyValueFactory<>("stato"));
 
         // Editing Titolo
         titleColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -199,6 +201,14 @@ public class MainController {
                 FilmFactory.getInstance().createWithNewRating(e.getRowValue(), e.getNewValue()));
             populateFilterMenus();
         });
+
+        // Editing Stato Visione
+        stateColumn.setCellFactory(ComboBoxTableCell.forTableColumn(StatoVisione.values()));
+        stateColumn.setOnEditCommit(e -> {
+            catalog.updateEntry(e.getRowValue(),
+                FilmFactory.getInstance().createWithNewStato(e.getRowValue(), e.getNewValue()));
+            populateFilterMenus();
+        });
     }
 
     /**
@@ -218,12 +228,19 @@ public class MainController {
 
     /**
      * Metodo per gestire la riproduzione del film selezionato, delegando al MediaPlayerManager
+     * Il file, inoltre, se nello stato NON VISTO, viene aggiornato a IN_VISIONE
      * */
     @FXML
     private void handlePlay() {
         IFilm selected = movieTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
             MediaPlayerManager.getInstance().play(selected.getPath());
+            // Se il film era nello stato NON VISTO, aggiorniamo lo stato a IN_VISIONE
+            if (selected.getStato() == StatoVisione.NON_VISTO) {
+                catalog.updateEntry(selected,
+                    FilmFactory.getInstance().createWithNewStato(selected, StatoVisione.IN_VISIONE));
+                populateFilterMenus();
+            }
         }
     }
 

@@ -36,6 +36,7 @@
          <TableColumn fx:id="genreColumn" text="Genere" prefWidth="100.0" />
          <TableColumn fx:id="yearColumn" text="Anno" prefWidth="80.0" />
          <TableColumn fx:id="ratingColumn" text="Rating" prefWidth="100.0" />
+         <TableColumn fx:id="stateColumn" text="Stato Visione" prefWidth="100.0" />
       </columns>
    </TableView>
 

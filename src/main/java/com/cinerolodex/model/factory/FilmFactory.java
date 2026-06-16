@@ -14,7 +14,7 @@ import com.cinerolodex.model.StatoVisione;
 
 /**
  * @see src/test/java/com/cinerolodex/test/FilmFactoryTest.java per test di unità che verificano il corretto funzionamento del FilmFactory.
- * Il FilmFactory è responsabile della creazione di istanze di IFilm.
+ * Il FilmFactory è responsabile della creazione di istanze di IFilm. DESIGN PATTERN: Simple Factory
  */
 public class FilmFactory implements IFilmFactory {
     private static FilmFactory instance;
@@ -30,7 +30,7 @@ public class FilmFactory implements IFilmFactory {
         return instance;
     }
 
-    // --- RICETTA 1: Creazione da dati grezzi dal file system ---
+    // 1: Creazione da dati grezzi provenienti dal file system
     @Override
     public IFilm createFromRaw(RawElement raw) {
         //Pulizia del titolo dal nome del file
@@ -65,7 +65,7 @@ public class FilmFactory implements IFilmFactory {
         );
     }
 
-    // --- RICETTA 2: Creazione per aggiornamento del titolo (Copia e Modifica) ---
+    // 2: Creazione per aggiornamento del titolo (Copia e Modifica) ---
     @Override
     public IFilm createWithNewTitle(IFilm original, String nuovoTitolo) {
         return new Film(
@@ -80,7 +80,7 @@ public class FilmFactory implements IFilmFactory {
         );
     }
 
-    // --- RICETTA 3: Creazione per aggiornamento del regista (Copia e Modifica) ---
+    // 3: Creazione per aggiornamento del regista (Copia e Modifica) ---
     @Override
     public IFilm createWithNewRegista(IFilm original, String nuovoRegista) {
         return new Film(
@@ -91,7 +91,7 @@ public class FilmFactory implements IFilmFactory {
         );
     }
 
-    // --- RICETTA 4: Creazione per aggiornamento dell'anno (Copia e Modifica) ---
+    // 4: Creazione per aggiornamento dell'anno (Copia e Modifica) ---
     @Override
     public IFilm createWithNewYear(IFilm original, int nuovoAnno) {
         return new Film(original.getId(), original.getTitolo(), original.getPath(),
@@ -99,7 +99,7 @@ public class FilmFactory implements IFilmFactory {
                         original.getRegista(), original.getGenere(), new Anno(nuovoAnno));
     }
 
-    // --- RICETTA 5: Creazione per aggiornamento del genere (Copia e Modifica) ---
+    // 5: Creazione per aggiornamento del genere (Copia e Modifica) ---
     @Override
     public IFilm createWithNewGenere(IFilm original, String nuovoGenere) {
         return new Film(
@@ -109,7 +109,7 @@ public class FilmFactory implements IFilmFactory {
         );
     }
 
-    // --- RICETTA 6: Creazione per aggiornamento della valutazione (Copia e Modifica) ---
+    // 6: Creazione per aggiornamento della valutazione (Copia e Modifica) ---
     @Override
     public IFilm createWithNewRating(IFilm original, Rating nuovoRating) {
         return new Film(original.getId(), original.getTitolo(), original.getPath(),
@@ -117,10 +117,18 @@ public class FilmFactory implements IFilmFactory {
                         original.getRegista(), original.getGenere(), original.getAnno());
     }
 
+    // 7: Creazione per aggiornamento dello stato di visione (Copia e Modifica) ---
+    @Override
+    public IFilm createWithNewStato(IFilm original, StatoVisione nuovoStato) {
+        return new Film(original.getId(), original.getTitolo(), original.getPath(),
+                        original.getRating(), nuovoStato,
+                        original.getRegista(), original.getGenere(), original.getAnno());
+    }
+
     /**
-     * Metodo helper per trasformare "NomeFile.mp4" in "NomeFile", si pulisce l'estentsione
+     * Metodo helper per trasformare "NomeFile.mp4" in "NomeFile", si pulisce l'estensione
      */
-    private String cleanTitle(String rawTitle) {
+    private static String cleanTitle(String rawTitle) {
         if (rawTitle == null || rawTitle.isEmpty()) return "Titolo Sconosciuto";
 
         // Rimozione dell'estensione (es. .mp4, .mkv, .avi)
