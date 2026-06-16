@@ -1,19 +1,14 @@
 package com.cinerolodex.manager;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.nio.file.Path;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.chart.PieChart.Data;
 
 import com.cinerolodex.contract.IFileSystemManager;
 import com.cinerolodex.contract.IFilm;
 import com.cinerolodex.contract.IFilmFactory;
 import com.cinerolodex.model.RawElement;
 import com.cinerolodex.contract.IPersistence;
-import com.cinerolodex.manager.DatabaseManager;
-import com.cinerolodex.manager.FileSystemManager;
 import com.cinerolodex.model.factory.FilmFactory;
 
 
