@@ -15,12 +15,11 @@ import com.cinerolodex.model.StatoVisione;
 import com.cinerolodex.manager.CatalogManager;
 
 /**
-* Test per verificare il funzionamento del metodo filter del FilterService, in particolare per il filtro per genere.
+* Test per verificare il funzionamento del metodo filter del FilterService, in particolare per il filtro per GENERE.
 * @see FilterService#filter(String, String, String, String, String, String)
 */
-class FilterServiceTest {
+public class FilterServiceTest {
     private FilterService filterService;
-    private List<IFilm> testList;
 
     @BeforeEach
     void setUp() {
@@ -49,7 +48,7 @@ class FilterServiceTest {
     }
 
     @Test
-    void testFilterByGenre() {
+    public void testFilterByGenre() {
         // Cerchiamo "Azione": ora ci aspettiamo esattamente 2 film
         List<IFilm> result = filterService.filter(null, "Azione", null, null, null, null); 
         assertEquals(2, result.size(), "Dovrebbe trovare 2 film di genere Azione");
