@@ -6,26 +6,44 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
-<VBox spacing="15.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+<VBox stylesheets="@assets/style.css" spacing="15.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.cinerolodex.MainController">
    
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
 
-   <ImageView fitWidth="120.0" preserveRatio="true">
-      <image>
-         <Image url="@assets/CineRolodexLogoNOBG.png" />
-      </image>
-   </ImageView>
+   <HBox spacing="12" alignment="CENTER_LEFT">
+      <ImageView fitWidth="200.0" preserveRatio="true">
+         <image>
+            <Image url="@assets/CineRolodexLogoNOBG.png" />
+         </image>
+      </ImageView>
 
-   <HBox spacing="10" alignment="CENTER_LEFT">
-      <TextField fx:id="searchField" promptText="Cerca per titolo..."/>
-      <ComboBox fx:id="genreFilter" promptText="Genere"/>
-      <ComboBox fx:id="directorFilter" promptText="Regista"/>
-      <ComboBox fx:id="yearFilter" promptText="Anno"/>
-      <ComboBox fx:id="statusFilter" promptText="Stato"/>
-      <ComboBox fx:id="ratingFilter" promptText="Rating"/>
+      <VBox spacing="5">
+         <Label text="Ricerca" />
+         <TextField fx:id="searchField" promptText="Cerca per titolo..."/>
+      </VBox>
+      <VBox spacing="5">
+         <Label text="Genere" />
+         <ComboBox fx:id="genreFilter" promptText="Genere"/>
+      </VBox>
+      <VBox spacing="5">
+         <Label text="Regista" />
+         <ComboBox fx:id="directorFilter" promptText="Regista"/>
+      </VBox>
+      <VBox spacing="5">
+         <Label text="Anno" />
+         <ComboBox fx:id="yearFilter" promptText="Anno"/>
+      </VBox>
+      <VBox spacing="5">
+         <Label text="Stato" />
+         <ComboBox fx:id="statusFilter" promptText="Stato"/>
+      </VBox>
+      <VBox spacing="5">
+         <Label text="Rating" />
+         <ComboBox fx:id="ratingFilter" promptText="Rating"/>
+      </VBox>
       <Button text="Reset" onAction="#handleResetFilters"/>
    </HBox>
 
@@ -33,21 +51,18 @@
       <columns>
          <TableColumn fx:id="titleColumn" text="Titolo" prefWidth="250.0" />
          <TableColumn fx:id="directorColumn" text="Regista" prefWidth="150.0" />
-         <TableColumn fx:id="genreColumn" text="Genere" prefWidth="100.0" />
-         <TableColumn fx:id="yearColumn" text="Anno" prefWidth="80.0" />
-         <TableColumn fx:id="ratingColumn" text="Rating" prefWidth="100.0" />
-         <TableColumn fx:id="stateColumn" text="Stato Visione" prefWidth="100.0" />
+         <TableColumn fx:id="genreColumn" text="Genere" prefWidth="150.0" />
+         <TableColumn fx:id="yearColumn" text="Anno" prefWidth="100.0" />
+         <TableColumn fx:id="ratingColumn" text="Rating" prefWidth="200.0" />
+         <TableColumn fx:id="stateColumn" text="Stato Visione" prefWidth="200.0" />
       </columns>
    </TableView>
 
    <HBox spacing="10.0" alignment="CENTER_RIGHT">
-      <Button text="Aggiungi Film" onAction="#handleAddMovie"
-               style="-fx-background-color: #2ecc71; -fx-text-fill: white;" />
-      <Button text="Elimina" onAction="#handleDelete"
-               style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
+      <Button text="AGGIUNGI" onAction="#handleAddMovie"/>
+      <Button text="ELIMINA" onAction="#handleDelete"/>
       <Separator orientation="VERTICAL" />
-      <Button text="RIPRODUCI" onAction="#handlePlay"
-               style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;" />
+      <Button text="RIPRODUCI" onAction="#handlePlay"/>
    </HBox>
 
 </VBox>

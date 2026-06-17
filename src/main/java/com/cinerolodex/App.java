@@ -1,5 +1,7 @@
 package com.cinerolodex;
 
+import javafx.scene.text.Font;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +19,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("cinerolodex"), 640, 480);
+        Font.loadFont(getClass().getResourceAsStream("/com/cinerolodex/assets/fonts/Gorditas-Regular.ttf"), 14);
+        scene = new Scene(loadFXML("cinerolodex"), 1800, 680);
         stage.setScene(scene);
         stage.show();
     }

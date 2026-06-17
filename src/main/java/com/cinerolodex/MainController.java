@@ -48,8 +48,6 @@ public class MainController {
 
     @FXML
     public void initialize() {
-
-
         // --- CONFIGURAZIONE COLONNE ---
         setupTableColumns();
 

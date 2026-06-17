@@ -1,0 +1,66 @@
+@font-face {
+    font-family: 'Gorditas-Regular';
+    src: url('assets/fonts/Gorditas-Regular.ttf'); 
+}
+
+.root {
+    -fx-font-family: 'Gorditas';
+    -fx-font-size: 16px;
+}
+
+VBox {
+    -fx-background-color: #1c1c1c;
+    -fx-padding: 20px;
+}
+
+HBox {
+    -fx-background-color: #2c2c2c;
+    -fx-padding: 10px;
+    -fx-border-color: #444;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+.button {
+    -fx-background-color: #d9ba7bb9;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #d9ba7bed;
+}
+
+
+.table-row-cell {
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+    -fx-cell-size: 40px;
+    -fx-zoom: 1.05;
+}
+
+.table-cell {
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+}
+
+/* Righe dispari */
+.table-row-cell:odd {
+    -fx-background-color: #2b2b2b;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #444444;
+    -fx-scale-x: 1.04; 
+    -fx-scale-y: 1.04;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 15, 0.2, 0, 3);
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #E50914; 
+    -fx-text-fill: white; 
+    -fx-font-weight: bold;
+}
